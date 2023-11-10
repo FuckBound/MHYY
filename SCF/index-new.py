@@ -1,3 +1,9 @@
+# WARNING: THIS IS AN OUTDATED VERSION
+# SERVERLESS CLOUD FUNCTION IN TENCENT OR ALIYUN IS NOT SUPPORTED
+# YOU SHOULD MOVE TO QINGLONG PANEL FOR A BETTER EXPERIENCE
+# IF U STILL NEED TO USE SERVERLESS CLOUD FUNCTION, U NEED TO EDIT THE FILE ON THE ROOT DICTIONARY TO MAKE IT SUITABLE TO THE FUNCTION
+# THIS VERSION WILL NOT GET ANY SUPPORT FROM THE DEVELOPER
+
 import requests as r
 import json
 import os
@@ -7,9 +13,9 @@ import sentry_sdk
 import random
 import time
 
-# with open('./config.json', 'rt') as f:   # Local debugging
-#     config = json.loads(f.read())
-#     f.close()
+with open('./config.json', 'rt') as f:
+    config = json.loads(f.read())
+    f.close()
 
 sentry_sdk.init(
     "https://425d7b4536f94c9fa540fe34dd6609a2@o361988.ingest.sentry.io/6352584",
@@ -19,13 +25,6 @@ sentry_sdk.init(
     # We recommend adjusting this value in production.
     traces_sample_rate=1.0
 )
-
-# Running in Github Action, use this to get the config
-conf = json.loads(os.environ.get('config'))
-
-# Running locally, use this to get the config
-# with open('config.json') as f:
-#     conf = json.loads(f.read())
 
 if type(conf) == type(list()):
     pass
@@ -59,7 +58,7 @@ NotificationURL = 'https://api-cloudgame.mihoyo.com/hk4e_cg_cn/gamer/api/listNot
 WalletURL = 'https://api-cloudgame.mihoyo.com/hk4e_cg_cn/wallet/wallet/get'
 AnnouncementURL = 'https://api-cloudgame.mihoyo.com/hk4e_cg_cn/gamer/api/getAnnouncementInfo'
 
-if __name__ == '__main__':
+def handler(*args):
     for config in conf:
         if config == '':
             # Verify config
@@ -96,7 +95,7 @@ if __name__ == '__main__':
             'User-Agent': 'okhttp/4.9.0'
         }
         bbsid = re.findall(r'oi=[0-9]+', token)[0].replace('oi=', '')
-        wait_time = random.randint(1, 3600) # Random Sleep to Avoid Ban
+        wait_time = random.randint(1, 120) # Random Sleep to Avoid Ban
         print(f'为了避免同一时间签到人数太多导致被官方怀疑，开始休眠 {wait_time} 秒')
         time.sleep(wait_time)
         wallet = r.get(WalletURL, headers=headers, timeout=60)
